@@ -9,10 +9,14 @@
 import maplibregl from 'maplibre-gl'
 import { shallowRef, onMounted, onUnmounted, markRaw } from 'vue';
 import MapControls from './MapControls.vue';
+import MapService from '../service/MapService'
 
 export default {
   name: "MapComponent",
   setup() {
+    const mapService = new MapService()
+    mapService.getPinballMachinesCoords()
+
     onMounted(() => {
       const map = new maplibregl.Map({
         container: "map",
@@ -23,6 +27,7 @@ export default {
     })
 
     function onSetLayer (layer: string) {
+      mapService.getPinballMachinesCoords()
     }
 
     return { onSetLayer }
