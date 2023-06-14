@@ -2,8 +2,8 @@
   <div class="map-controls">
 
     <button
-      :class="['map-controls__btn', currentLayer === layerTypes.PinballMachines ? 'active' : '']"
-      @click="setLayer(layerTypes.PinballMachines)"
+      :class="['map-controls__btn', currentLayer === layerTypes.Pinball ? 'active' : '']"
+      @click="setLayer(layerTypes.Pinball)"
     >
       Pinball machines
     </button>
@@ -19,19 +19,15 @@
 </template>
 
 <script lang="ts">
+import { LayerTypes } from '@/types/common'
 import { ref } from 'vue'
-
-enum LayerTypes {
-  PinballMachines = 'pinballMachines',
-  Sensors = 'sensors',
-}
 
 export default {
   name: 'MapControls',
   setup (_props, { emit }) {
     const layerTypes = LayerTypes
 
-    const currentLayer = ref(LayerTypes.PinballMachines)
+    const currentLayer = ref(LayerTypes.Sensors)
 
     function setLayer (layer: LayerTypes) {
       currentLayer.value = layer
