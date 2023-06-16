@@ -1,5 +1,8 @@
 <template>
   <div class="map-component">
+    <div :class="['map-component__loading', loading ? 'active' : '']">
+      <div class="lds-dual-ring"></div>
+    </div>
     <MapControls @setLayer="onSetLayer" @setCity="onSetCity" />
     <div id="map" class="map-component__map"></div>
   </div>
@@ -18,9 +21,13 @@ export default {
   name: "MapComponent",
   setup() {
     const mapService = new MapService()
-    let mapObj = ref<Map>()
 
-    // Инициализация карты
+    let loading = ref(false)
+
+    // Объект карты
+    let mapObj: Map
+
+    // Инициализация карты и установка экземпляра карты в mapObj
     function initMap() {
       const map = new maplibregl.Map({
         container: "map",
@@ -29,7 +36,7 @@ export default {
         zoom: 9
       })
 
-      mapObj.value = map
+      mapObj = map
     }
 
     onMounted(() => {
@@ -38,6 +45,7 @@ export default {
 
     // Функция изменения слоя карты
     async function onSetLayer(layer: LayerTypesEnum) {
+      loading.value = true
 
       // Очистка карты в случае, если уже выбран какой-то слой
       clearMap()
@@ -53,25 +61,26 @@ export default {
         default:
           break;
       }
+      loading.value = false
     }
 
     // Удаление текущего слоя с карты
     function clearMap () {
-      const currentLayer = mapObj.value?.getLayer('markers')
-      const currentSource = mapObj.value?.getSource('markers')
+      const currentLayer = mapObj.getLayer('markers')
+      const currentSource = mapObj.getSource('markers')
 
       if (currentLayer) {
-        mapObj.value?.removeLayer(currentLayer.id)
+        mapObj.removeLayer(currentLayer.id)
       }
 
       if (currentSource) {
-        mapObj.value?.removeSource(currentSource.id)
+        mapObj.removeSource(currentSource.id)
       }
     }
 
     // Добавление нового слоя с маркерами для карты
     function setMarkers (geoJsons: Array<GeoJsonModel>) {
-      const map = mapObj.value!
+      const map = mapObj
       map.loadImage(
         'https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
         function (error, image) {
@@ -107,11 +116,11 @@ export default {
 
     // Переход к выбранному городу
     function onSetCity(city: CityModel) {
-      mapObj.value!.jumpTo({ center: city.coords as LngLatLike });
-      mapObj.value!.zoomTo(10, { duration: 2000 });
+      mapObj.jumpTo({ center: city.coords as LngLatLike });
+      mapObj.zoomTo(10, { duration: 2000 });
     }
 
-    return { onSetLayer, onSetCity, mapObj }
+    return { onSetLayer, onSetCity, loading }
   },
   components: {
     MapControls
@@ -128,11 +137,48 @@ export default {
     height: 100%;
   }
 
-  &__marker {
-    width: 10px;
-    height: 10px;
-    background-color: red;
-    border-radius: 100%;
+  &__loading {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    z-index: 999;
+
+    &.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 }
+
+// Loader styles
+.lds-dual-ring {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 </style>

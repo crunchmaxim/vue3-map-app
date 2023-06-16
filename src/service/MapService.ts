@@ -1,28 +1,24 @@
 import GeoJsonModel from '@/models/GeoJsonModel'
 import type { GeoJsonConstructorData } from '@/models/GeoJsonModel'
 import MapApiGateway from '../api/MapApiGateway'
-import { useMapStore } from '@/stores/MapStore'
 
+// Сервис карты
 export default class MapService {
   api
-  store
 
   constructor () {
     this.api = new MapApiGateway()
-    this.store = useMapStore()
   }
 
   async getPinballCoords () {
     const res = await this.api.getPinballCoords()
     const geoJsonArr = this.convertPinballToGeoJson(res.locations)
-    this.store.setGeoJsons(geoJsonArr)
     return geoJsonArr
   }
 
   convertPinballToGeoJson (collection: Array<any>) {
     const result = collection.map(i => {
       const data: GeoJsonConstructorData = {
-        // coordinates: [i.lat, i.lon],
         coordinates: [i.lon, i.lat],
         name: i.name
       }
@@ -34,7 +30,6 @@ export default class MapService {
   async getSensorsCoords () {
     const res = await this.api.getSensorsCoords()
     const geoJsonArr = this.convertSensorsToGeoJson(res)
-    this.store.setGeoJsons(geoJsonArr)
     return geoJsonArr
   }
 
