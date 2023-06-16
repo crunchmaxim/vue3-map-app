@@ -87,6 +87,7 @@ export default defineComponent({
           if (error) throw error;
 
           if (!map.hasImage('custom-marker')) {
+            // @ts-ignore
             map.addImage('custom-marker', image);
           }
 
