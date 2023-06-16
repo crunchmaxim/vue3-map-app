@@ -10,14 +10,14 @@
 
 <script lang="ts">
 import maplibregl, { type LngLatLike, Map } from 'maplibre-gl'
-import { onMounted, ref } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 import MapControls from './MapControls.vue';
 import MapService from '../service/MapService'
 import { LayerTypesEnum } from '@/types/common';
 import type CityModel from '@/models/CityModel';
 import type GeoJsonModel from '@/models/GeoJsonModel';
 
-export default {
+export default defineComponent({
   name: "MapComponent",
   setup() {
     const mapService = new MapService()
@@ -125,7 +125,7 @@ export default {
   components: {
     MapControls
   }
-}
+})
 </script>
 
 <style lang="scss">

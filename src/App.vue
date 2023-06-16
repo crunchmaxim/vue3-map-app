@@ -4,15 +4,16 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import MapComponent from './components/MapComponent.vue'
 
-export default {
+export default defineComponent({
   name: 'App',
   components: {
     MapComponent,
   },
-}
+})
 </script>
 
 <style scoped>

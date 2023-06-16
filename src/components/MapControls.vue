@@ -34,9 +34,9 @@
 <script lang="ts">
 import CityModel from '@/models/CityModel'
 import { LayerTypesEnum } from '@/types/common'
-import { ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'MapControls',
   setup (_props, { emit }) {
     const layerTypesEnum = LayerTypesEnum
@@ -58,8 +58,7 @@ export default {
 
     return { setLayer, setCity, layerTypesEnum, cities, currentLayer }
   }
-}
-
+})
 </script>
 
 <style lang="scss">

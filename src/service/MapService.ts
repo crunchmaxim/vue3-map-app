@@ -2,7 +2,8 @@ import GeoJsonModel from '@/models/GeoJsonModel'
 import type { GeoJsonConstructorData } from '@/models/GeoJsonModel'
 import MapApiGateway from '../api/MapApiGateway'
 
-// Сервис карты
+// Сервис для работы с картой. Обычно сервис содержит в себе основную бизнес-логику.
+// В данном случае сервис отвечает за получение данных посредством транспортного слоя (MapApiGateway) и их преобразование.
 export default class MapService {
   api
 
