@@ -15,14 +15,15 @@ export default class MapService {
   async getPinballCoords () {
     const res = await this.api.getPinballCoords()
     const geoJsonArr = this.convertPinballToGeoJson(res.locations)
-    this.store.setPinballGeoJsons(geoJsonArr)
+    this.store.setGeoJsons(geoJsonArr)
     return geoJsonArr
   }
 
   convertPinballToGeoJson (collection: Array<any>) {
     const result = collection.map(i => {
       const data: GeoJsonConstructorData = {
-        coordinates: [i.lat, i.lon],
+        // coordinates: [i.lat, i.lon],
+        coordinates: [i.lon, i.lat],
         name: i.name
       }
       return new GeoJsonModel(data)
@@ -33,7 +34,7 @@ export default class MapService {
   async getSensorsCoords () {
     const res = await this.api.getSensorsCoords()
     const geoJsonArr = this.convertSensorsToGeoJson(res)
-    this.store.setSensorsGeoJsons(geoJsonArr)
+    this.store.setGeoJsons(geoJsonArr)
     return geoJsonArr
   }
 

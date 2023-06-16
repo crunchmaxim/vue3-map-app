@@ -1,40 +1,62 @@
 <template>
   <div class="map-controls">
 
-    <button
-      :class="['map-controls__btn', currentLayer === layerTypes.Pinball ? 'active' : '']"
-      @click="setLayer(layerTypes.Pinball)"
-    >
-      Pinball machines
-    </button>
+    <div class="map-controls__wrapper">
+      <button
+        :class="['map-controls__btn', currentLayer === layerTypesEnum.Pinball ? 'active' : '']"
+        @click="setLayer(layerTypesEnum.Pinball)"
+      >
+        Pinball machines
+      </button>
 
-    <button
-    :class="['map-controls__btn', currentLayer === layerTypes.Sensors ? 'active' : '']"
-      @click="setLayer(layerTypes.Sensors)"
-    >
-      Sensors
-    </button>
+      <button
+      :class="['map-controls__btn', currentLayer === layerTypesEnum.Sensors ? 'active' : '']"
+        @click="setLayer(layerTypesEnum.Sensors)"
+      >
+        Sensors
+      </button>
+    </div>
+
+    <div class="map-controls__wrapper">
+      <button
+        v-for="city in cities"
+        :key="city.name"
+        class="map-controls__btn"
+        @click="setCity(city)"
+      >
+        {{ `To ${city.name}` }}
+      </button>
+    </div>
 
   </div>
 </template>
 
 <script lang="ts">
-import { LayerTypes } from '@/types/common'
+import CityModel from '@/models/CityModel'
+import { LayerTypesEnum } from '@/types/common'
 import { ref } from 'vue'
 
 export default {
   name: 'MapControls',
   setup (_props, { emit }) {
-    const layerTypes = LayerTypes
+    const layerTypesEnum = LayerTypesEnum
+    const currentLayer = ref<LayerTypesEnum | null>(null)
 
-    const currentLayer = ref(LayerTypes.Sensors)
+    const cities = [
+      new CityModel('Berlin', [13.41053, 52.52437]),
+      new CityModel('Portland', [-122.674195, 45.520247]),
+    ]
 
-    function setLayer (layer: LayerTypes) {
+    function setLayer (layer: LayerTypesEnum) {
       currentLayer.value = layer
       emit('setLayer', layer)
     }
 
-    return { setLayer, layerTypes, currentLayer }
+    function setCity (city: CityModel) {
+      emit('setCity', city)
+    }
+
+    return { setLayer, setCity, layerTypesEnum, cities, currentLayer }
   }
 }
 
@@ -45,12 +67,19 @@ export default {
     position: absolute;
     left: 20px;
     top: 20px;
-    padding: 10px;
-    background-color: #fff;
     z-index: 100;
     display: flex;
+    gap: 30px;
     flex-direction: column;
-    gap: 10px;
+
+    &__wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 20px;
+    }
 
     &__btn {
       border: none;
@@ -65,7 +94,8 @@ export default {
       }
 
       &.active {
-        background-color: #FF8551;
+        background-color: #4264fb;
+        color: #fff;
       }
     }
   }

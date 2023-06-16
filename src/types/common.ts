@@ -1,4 +1,4 @@
-export enum LayerTypes {
+export enum LayerTypesEnum {
   Pinball = 'pinball',
   Sensors = 'sensors',
 }

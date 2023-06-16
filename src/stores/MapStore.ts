@@ -3,19 +3,14 @@ import { defineStore } from 'pinia'
 
 export const useMapStore = defineStore('MapStore', {
   state: () => ({
-    pinballGeoJsons: [] as Array<GeoJsonModel>,
-    sensorsGeoJsons: [] as Array<GeoJsonModel>,
+    geoJsons: [] as Array<GeoJsonModel>,
   }),
   getters: {
-    getPinballGeoJsons: (state) => state.pinballGeoJsons.slice(),
-    getSensorsGeoJsons: (state) => state.sensorsGeoJsons.slice(),
+    getGeoJsons: (state) => state.geoJsons.slice(),
   },
   actions: {
-    setPinballGeoJsons (value: Array<GeoJsonModel>) {
-      this.pinballGeoJsons = value
-    },
-    setSensorsGeoJsons (value: Array<GeoJsonModel>) {
-      this.sensorsGeoJsons = value
+    setGeoJsons (value: Array<GeoJsonModel>) {
+      this.geoJsons = value
     },
   },
 })
